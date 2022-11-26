@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -48,7 +49,7 @@ public class BankServiceImpl implements BankService {
     public CreateBankResponse createBank(final CreateBankRequest request) {
         final Bank bank = Bank.builder().name(request.getName()).creatorId(request.getCreatorId()).status(BankStatus.OPEN).build();
         final BankMember member =  BankMember.builder().userId(request.getCreatorId()).bank(bank).build();
-        bank.setMembers(Arrays.asList(member));
+        bank.setMembers(Collections.singletonList(member));
         final Bank savedBank = bankRepository.save(bank);
 
         return new BankToCreateBankResponseTransformer().transform(savedBank);
