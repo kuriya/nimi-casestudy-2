@@ -17,9 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "transactions")
 public class Transaction {
 
-    public Transaction() {
 
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

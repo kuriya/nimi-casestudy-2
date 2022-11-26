@@ -4,6 +4,9 @@ import com.nimi.guildbank.domain.Bank;
 import com.nimi.guildbank.dto.CreateBankResponse;
 
 
+/**
+ * This class transforms Bank domain object to CreateBankResponse dto
+ */
 public class BankToCreateBankResponseTransformer
 		implements Transformer<Bank, CreateBankResponse> {
 

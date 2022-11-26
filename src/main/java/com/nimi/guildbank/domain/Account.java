@@ -20,9 +20,7 @@ import java.util.Collection;
 @Table(name = "accounts")
 public class Account {
 
-    public Account() {
 
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
