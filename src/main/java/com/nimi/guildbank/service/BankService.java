@@ -14,9 +14,9 @@ public interface BankService {
 
     CloseAccountResponse closeAccount(long bankId, long accountId);
 
-    AccountDepositResponse deposit(long bankId, long accountId, AccountTransactionRequest request);
+    AccountTransactionResponse deposit(long bankId, long accountId, AccountTransactionRequest request);
 
-    AccountDepositResponse withdrawal(long bankId, long accountId, AccountTransactionRequest request);
+    AccountTransactionResponse withdrawal(long bankId, long accountId, AccountTransactionRequest request);
 
     Collection<BankDTO> getBanks();
 

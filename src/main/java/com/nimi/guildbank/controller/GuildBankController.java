@@ -111,7 +111,7 @@ public final class GuildBankController {
         LOGGER.info("Adding member : {} to bank : {}", userId, bankId);
         final AddBankMemberResponse response = bankService.addMembers(bankId, userId);
         LOGGER.info("Added member : {} to bank : {}", userId, bankId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -170,10 +170,10 @@ public final class GuildBankController {
      * @return
      */
     @PostMapping("/{bankId}/accounts/{accountId}/deposit")
-    public ResponseEntity<AccountDepositResponse> deposit(@Validated @RequestBody final AccountTransactionRequest request,
-                                                        @PathVariable long bankId, @PathVariable long accountId) {
+    public ResponseEntity<AccountTransactionResponse> deposit(@Validated @RequestBody final AccountTransactionRequest request,
+                                                              @PathVariable long bankId, @PathVariable long accountId) {
         LOGGER.info("Request received to deposit account : {} and amount : {} ", accountId, request.getTransactionAmount());
-        final AccountDepositResponse response = bankService.deposit(bankId,accountId, request);
+        final AccountTransactionResponse response = bankService.deposit(bankId,accountId, request);
         LOGGER.info("Account deposit operation is completed : {}",response.toString());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -184,10 +184,10 @@ public final class GuildBankController {
      * @return
      */
     @PostMapping("/{bankId}/accounts/{accountId}/withdraw")
-    public ResponseEntity<AccountDepositResponse> withdrawal(@Validated @RequestBody final AccountTransactionRequest request,
-                                                          @PathVariable long bankId, @PathVariable long accountId) {
+    public ResponseEntity<AccountTransactionResponse> withdrawal(@Validated @RequestBody final AccountTransactionRequest request,
+                                                                 @PathVariable long bankId, @PathVariable long accountId) {
         LOGGER.info("Request received to withdraw from account : {} and amount : {} ", accountId, request.getTransactionAmount());
-        final AccountDepositResponse response = bankService.deposit(bankId,accountId, request);
+        final AccountTransactionResponse response = bankService.withdrawal(bankId,accountId, request);
         LOGGER.info("Account withdrawal operation is completed : {}",response.toString());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

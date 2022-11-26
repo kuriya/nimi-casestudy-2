@@ -1,6 +1,5 @@
 package com.nimi.guildbank.dto;
 
-import com.nimi.guildbank.domain.BankStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class AccountDepositResponse {
+public class AccountTransactionResponse {
     private final long bankId;
     private final long accountId;
     private final double accountBalance;

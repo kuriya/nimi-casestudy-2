@@ -15,6 +15,7 @@ import org.springframework.boot.context.properties.source.InvalidConfigurationPr
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,10 @@ public class BankServiceImpl implements BankService {
     @Override
     public CreateBankResponse createBank(final CreateBankRequest request) {
         final Bank bank = Bank.builder().name(request.getName()).creatorId(request.getCreatorId()).status(BankStatus.OPEN).build();
+        final BankMember member =  BankMember.builder().userId(request.getCreatorId()).bank(bank).build();
+        bank.setMembers(Arrays.asList(member));
         final Bank savedBank = bankRepository.save(bank);
+
         return new BankToCreateBankResponseTransformer().transform(savedBank);
     }
 
@@ -80,6 +84,7 @@ public class BankServiceImpl implements BankService {
             throw new IllegalArgumentException("Bank is already closed");
         }
         final Account account = Account.builder().bank(bank).creatorId(request.getCreatorId()).status(AccountStatus.OPEN).amount(request.getDepositAmount()).build();
+        bank.setAccount(account);
         final Account savedAccount = accountRepository.save(account);
 
         return CreateAccountResponse.builder().balance(savedAccount.getAmount())
@@ -117,7 +122,7 @@ public class BankServiceImpl implements BankService {
      * @return
      */
     @Override
-    public AccountDepositResponse deposit(final long bankId, final long accountId, final AccountTransactionRequest request) {
+    public AccountTransactionResponse deposit(final long bankId, final long accountId, final AccountTransactionRequest request) {
         final Account account = getBankAccount(bankId, accountId);
 
         double accountBalance = account.getAmount() + request.getTransactionAmount();
@@ -137,7 +142,7 @@ public class BankServiceImpl implements BankService {
 
         final Account savedAccount = accountRepository.save(account);
 
-        return AccountDepositResponse.builder().accountBalance(savedAccount.getAmount())
+        return AccountTransactionResponse.builder().accountBalance(savedAccount.getAmount())
                 .transactionAmount(request.getTransactionAmount()).bankId(bankId).accountId(accountId).build();
 
     }
@@ -148,7 +153,7 @@ public class BankServiceImpl implements BankService {
      * @return
      */
     @Override
-    public AccountDepositResponse withdrawal(final long bankId, final long accountId, final AccountTransactionRequest request) {
+    public AccountTransactionResponse withdrawal(final long bankId, final long accountId, final AccountTransactionRequest request) {
         final Account account = getBankAccount(bankId, accountId);
         if (request.getTransactionAmount() > account.getAmount()) {
             throw new IllegalArgumentException("Account balance is not sufficient");
@@ -169,7 +174,7 @@ public class BankServiceImpl implements BankService {
         }
         final Account savedAccount = accountRepository.save(account);
 
-        return AccountDepositResponse.builder().accountBalance(savedAccount.getAmount())
+        return AccountTransactionResponse.builder().accountBalance(savedAccount.getAmount())
                 .transactionAmount(request.getTransactionAmount()).bankId(bankId).accountId(accountId).build();
 
     }

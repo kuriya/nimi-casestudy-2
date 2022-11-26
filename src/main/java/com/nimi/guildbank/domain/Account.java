@@ -36,7 +36,8 @@ public class Account {
     @Setter
     private double amount;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     private Bank bank;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
