@@ -1,5 +1,8 @@
 package com.nimi.guildbank.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,6 +13,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@Builder
+@Getter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "accounts")
@@ -22,12 +27,15 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
 
     @Column(name = "creator_id")
     private String creatorId;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
+
+    @Setter
     private double amount;
 
     @OneToOne(mappedBy = "account")
@@ -44,4 +52,8 @@ public class Account {
     @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @Version
+    @Column(name = "version")
+    private long version;
 }

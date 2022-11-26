@@ -2,6 +2,7 @@ package com.nimi.guildbank.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +23,8 @@ public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Setter
     @Enumerated(EnumType.STRING)
     private BankStatus status;
 
@@ -34,6 +37,7 @@ public class Bank {
     @Fetch(FetchMode.SELECT)
     private Collection<BankMember> members;
 
+    @Setter
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
