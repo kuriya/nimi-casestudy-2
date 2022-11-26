@@ -10,7 +10,7 @@ public interface BankService {
 
     CloseBankResponse closeBank(long id);
 
-    CreateAccountResponse createAccount(CreateAccountRequest request);
+    CreateAccountResponse createAccount(long bankId, CreateAccountRequest request);
 
     CloseAccountResponse closeAccount(long bankId, long accountId);
 

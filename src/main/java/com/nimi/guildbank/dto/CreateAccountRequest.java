@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 /**
@@ -16,10 +15,6 @@ import javax.validation.constraints.PositiveOrZero;
 @Getter
 @ToString
 public class CreateAccountRequest {
-
-    @NotNull(message = "'bankId' should not be null")
-    @Positive
-    private final Long bankId;
 
     @NotNull(message = "'depositAmount' should not be null")
     @PositiveOrZero
@@ -30,9 +25,7 @@ public class CreateAccountRequest {
 
 
     @JsonCreator
-    public CreateAccountRequest(@JsonProperty("bankId") Long bankId,
-                                @JsonProperty("depositAmount") Double depositAmount, @JsonProperty("creatorId") String creatorId) {
-        this.bankId = bankId;
+    public CreateAccountRequest(@JsonProperty("depositAmount") Double depositAmount, @JsonProperty("creatorId") String creatorId) {
         this.depositAmount = depositAmount;
         this.creatorId = creatorId;
     }

@@ -13,5 +13,6 @@ import lombok.ToString;
 public class CreateAccountResponse {
     private final long id;
     private final long bankId;
-    private final Double accountAmount;
+    private final Double balance;
+    private final String creatorId;
 }

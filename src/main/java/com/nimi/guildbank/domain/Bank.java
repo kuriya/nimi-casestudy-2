@@ -1,8 +1,6 @@
 package com.nimi.guildbank.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +11,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 @Entity
@@ -50,6 +50,5 @@ public class Bank {
     @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
 
 }

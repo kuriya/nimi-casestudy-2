@@ -45,10 +45,11 @@ public final class GuildBankController {
      * @param request
      * @return
      */
-    @PostMapping("/accounts")
-    public ResponseEntity<CreateAccountResponse> createAccount(@Validated @RequestBody final CreateAccountRequest request) {
+    @PostMapping("/{bankId}/accounts")
+    public ResponseEntity<CreateAccountResponse> createAccount(@PathVariable long bankId,
+                                                               @Validated @RequestBody final CreateAccountRequest request) {
         LOGGER.info("Creating a Bank account {}",request.toString());
-        final CreateAccountResponse response = bankService.createAccount(request);
+        final CreateAccountResponse response = bankService.createAccount(bankId,request);
         LOGGER.info("Bank account creation is completed {}",response.toString());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

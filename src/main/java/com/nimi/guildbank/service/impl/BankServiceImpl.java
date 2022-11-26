@@ -67,12 +67,14 @@ public class BankServiceImpl implements BankService {
 
     /**
      * This method is responsible to handle business logic of account create operation
+     *
+     * @param bankId
      * @param request
      * @return
      */
     @Override
-    public CreateAccountResponse createAccount(final CreateAccountRequest request) {
-        final Bank bank = bankRepository.findById(request.getBankId()).orElseThrow(() ->
+    public CreateAccountResponse createAccount(long bankId, final CreateAccountRequest request) {
+        final Bank bank = bankRepository.findById(bankId).orElseThrow(() ->
                 new InvalidConfigurationPropertyValueException("BankId", "Bank", "the bank does not exist for the given Id"));
         if (bank.getStatus() == BankStatus.CLOSE) {
             throw new IllegalArgumentException("Bank is already closed");
@@ -80,8 +82,8 @@ public class BankServiceImpl implements BankService {
         final Account account = Account.builder().bank(bank).creatorId(request.getCreatorId()).status(AccountStatus.OPEN).amount(request.getDepositAmount()).build();
         final Account savedAccount = accountRepository.save(account);
 
-        return CreateAccountResponse.builder().accountAmount(savedAccount.getAmount())
-                .bankId(savedAccount.getBank().getId()).id(savedAccount.getId()).build();
+        return CreateAccountResponse.builder().balance(savedAccount.getAmount())
+                .bankId(savedAccount.getBank().getId()).creatorId(savedAccount.getCreatorId()).id(savedAccount.getId()).build();
 
     }
 

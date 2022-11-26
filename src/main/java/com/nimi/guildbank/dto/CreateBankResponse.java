@@ -13,10 +13,6 @@ import lombok.ToString;
 public class CreateBankResponse {
     private final String name;
     private final long id;
+    private final String creatorId;
 
-
-    public CreateBankResponse(String name, long id) {
-        this.name = name;
-        this.id = id;
-    }
 }

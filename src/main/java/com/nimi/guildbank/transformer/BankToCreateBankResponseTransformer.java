@@ -12,7 +12,7 @@ public class BankToCreateBankResponseTransformer
 
 	@Override
 	public CreateBankResponse transform(final Bank source) {
-		return CreateBankResponse.builder().name(source.getName()).id(source.getId()).build();
+		return CreateBankResponse.builder().name(source.getName()).id(source.getId()).creatorId(source.getCreatorId()).build();
 	}
 
 }
