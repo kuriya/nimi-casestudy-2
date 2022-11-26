@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.path.json.JsonPath;
-import com.nimi.guildbank.domain.AccountStatus;
 import com.nimi.guildbank.dto.AccountTransactionRequest;
 import com.nimi.guildbank.dto.CreateAccountRequest;
 import com.nimi.guildbank.dto.CreateBankRequest;
@@ -106,6 +105,24 @@ public class GuildBankITest {
     }
 
     /**
+     * When close already closed bank
+     * Then throw errors
+     */
+    @Test
+    public void testCloseAlreadyClosedBank() {
+        final String guildBankSaveResponse = given().body(new CreateBankRequest(BANK_NAME, USER_ID_1)).contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_RESOURCE).then().statusCode(HttpStatus.SC_CREATED).extract().asString();
+        final long bankId = JsonPath.from(guildBankSaveResponse).getLong(ID);
+
+        given().contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_CLOSE_RESOURCE, bankId).then().statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo((int) bankId));
+
+        given().contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_CLOSE_RESOURCE, bankId).then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    /**
      * When create bank account with valid details
      * Then bank account should be created successfully
      */
@@ -152,6 +169,39 @@ public class GuildBankITest {
                 .body("bankId", equalTo((int) bankId))
                 .body("balance", equalTo((float) balance))
                 .body("id", equalTo((int) accountId));
+    }
+
+
+    /**
+     * When close bank account for already closed bank
+     * Then throw errors
+     */
+    @Test
+    public void testCloseBankAccountOfACloseBank() {
+        final String guildBankSaveResponse = given().body(new CreateBankRequest(BANK_NAME, USER_ID_1)).contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_RESOURCE).then().statusCode(HttpStatus.SC_CREATED).extract().asString();
+        final long bankId = JsonPath.from(guildBankSaveResponse).getLong(ID);
+
+        //Creating account
+        final String guildAccountSaveResponse = given().body(new CreateAccountRequest(DEPOSIT_AMOUNT, USER_ID_1)).contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_ACCOUNT_RESOURCE, bankId).then().statusCode(HttpStatus.SC_CREATED)
+                .body("bankId", equalTo((int) bankId))
+                .body("creatorId", is(USER_ID_1))
+                .body("balance", equalTo((float) DEPOSIT_AMOUNT))
+                .body("id", Matchers.notNullValue()).extract().asString();
+
+        final long accountId = JsonPath.from(guildAccountSaveResponse).getLong(ID);
+        final double balance = JsonPath.from(guildAccountSaveResponse).getDouble(BALANCE);
+
+        //closing bank
+        given().contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_CLOSE_RESOURCE, bankId).then().statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo((int) bankId));
+
+        //closing account
+        given().contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_ACCOUNT_CLOSE_RESOURCE, bankId, accountId).then().statusCode(HttpStatus.SC_BAD_REQUEST);
+
     }
 
 
