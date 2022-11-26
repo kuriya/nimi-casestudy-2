@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.path.json.JsonPath;
+import com.nimi.guildbank.domain.AccountStatus;
 import com.nimi.guildbank.dto.AccountTransactionRequest;
 import com.nimi.guildbank.dto.CreateAccountRequest;
 import com.nimi.guildbank.dto.CreateBankRequest;
@@ -31,12 +32,18 @@ public class GuildBankITest {
     private static final String GUILD_BANK_RESOURCE = "bankservice/api/banks";
 
     private static final String GUILD_BANK_ACCOUNT_RESOURCE = "bankservice/api/banks/{bankId}/accounts";
+
+    private static final String GUILD_BANK_ACCOUNT_CLOSE_RESOURCE = "bankservice/api/banks/{bankId}/accounts/{accountId}/close";
     private static final String GUILD_BANK_MEMBER_RESOURCE = "bankservice/api/banks/{bankId}/members/{userId}";
 
     private static final String GUILD_BANK_DEPOSIT_RESOURCE = "bankservice/api/banks/{bankId}/accounts/{accountId}/deposit";
 
     private static final String GUILD_BANK_WITHDRAW_RESOURCE = "bankservice/api/banks/{bankId}/accounts/{accountId}/withdraw";
+
+    private static final String GUILD_BANK_CLOSE_RESOURCE = "bankservice/api/banks/{bankId}/close";
     private static final String ID = "id";
+
+    private static final String BALANCE = "balance";
     private static final String BANK_NAME = "TestBank";
     private static final String USER_ID_1 = "5620071b-5cd6-4468-97ab-744ab1f3e010";
     private static final String USER_ID_2 = "5720071b-5cd6-4468-97ab-744ab1f3e011";
@@ -84,6 +91,21 @@ public class GuildBankITest {
     }
 
     /**
+     * When close bank with valid name and userId
+     * Then bank should be closed successfully
+     */
+    @Test
+    public void testCloseBankWithValidDetails() {
+        final String guildBankSaveResponse = given().body(new CreateBankRequest(BANK_NAME, USER_ID_1)).contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_RESOURCE).then().statusCode(HttpStatus.SC_CREATED).extract().asString();
+        final long bankId = JsonPath.from(guildBankSaveResponse).getLong(ID);
+
+        given().contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_CLOSE_RESOURCE, bankId).then().statusCode(HttpStatus.SC_OK)
+                .body("id", equalTo((int) bankId));
+    }
+
+    /**
      * When create bank account with valid details
      * Then bank account should be created successfully
      */
@@ -101,6 +123,35 @@ public class GuildBankITest {
                 .body("creatorId", is(USER_ID_1))
                 .body("balance", equalTo((float)DEPOSIT_AMOUNT))
                 .body("id", Matchers.notNullValue());
+    }
+
+    /**
+     * When close bank account with valid details
+     * Then bank account should be closed successfully
+     */
+    @Test
+    public void testCloseBankAccountWithValidDetails() {
+        final String guildBankSaveResponse = given().body(new CreateBankRequest(BANK_NAME, USER_ID_1)).contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_RESOURCE).then().statusCode(HttpStatus.SC_CREATED).extract().asString();
+        final long bankId = JsonPath.from(guildBankSaveResponse).getLong(ID);
+
+        //Creating account
+        final String guildAccountSaveResponse = given().body(new CreateAccountRequest(DEPOSIT_AMOUNT, USER_ID_1)).contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_ACCOUNT_RESOURCE, bankId).then().statusCode(HttpStatus.SC_CREATED)
+                .body("bankId", equalTo((int) bankId))
+                .body("creatorId", is(USER_ID_1))
+                .body("balance", equalTo((float) DEPOSIT_AMOUNT))
+                .body("id", Matchers.notNullValue()).extract().asString();
+
+        final long accountId = JsonPath.from(guildAccountSaveResponse).getLong(ID);
+        final double balance = JsonPath.from(guildAccountSaveResponse).getDouble(BALANCE);
+
+        //closing account
+        given().contentType(ContentType.JSON)
+                .when().post(GUILD_BANK_ACCOUNT_CLOSE_RESOURCE, bankId, accountId).then().statusCode(HttpStatus.SC_OK)
+                .body("bankId", equalTo((int) bankId))
+                .body("balance", equalTo((float) balance))
+                .body("id", equalTo((int) accountId));
     }
 
 

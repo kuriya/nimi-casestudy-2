@@ -1,7 +1,6 @@
 package com.nimi.guildbank.dto;
 
 import com.nimi.guildbank.domain.AccountStatus;
-import com.nimi.guildbank.domain.BankStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,6 +15,6 @@ public class CloseAccountResponse {
     private final AccountStatus status;
     private final long id;
     private final long bankId;
-    private final double amount;
+    private final double balance;
 
 }

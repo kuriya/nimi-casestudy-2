@@ -15,7 +15,6 @@ import org.springframework.boot.context.properties.source.InvalidConfigurationPr
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -113,7 +112,7 @@ public class BankServiceImpl implements BankService {
         account.setStatus(AccountStatus.CLOSE);
         final Account savedAccount = accountRepository.save(account);
         return CloseAccountResponse.builder().id(savedAccount.getId())
-                .bankId(savedAccount.getBank().getId()).amount(savedAccount.getAmount()).build();
+                .bankId(savedAccount.getBank().getId()).balance(savedAccount.getAmount()).build();
 
     }
 
