@@ -139,6 +139,7 @@ public class BankServiceImpl implements BankService {
     private AccountTransactionResponse getAccountTransactionResponse(long bankId, long accountId, AccountTransactionRequest request, Account account, Transaction transaction) {
         account.getTransactions().add(transaction);
 
+        //TODO  member validation needs to be added
         if (account.getBank().getStatus() == BankStatus.CLOSE) {
             throw new IllegalArgumentException("Bank is already closed");
         }
@@ -160,6 +161,8 @@ public class BankServiceImpl implements BankService {
     @Override
     public AccountTransactionResponse withdrawal(final long bankId, final long accountId, final AccountTransactionRequest request) {
         final Account account = getBankAccount(bankId, accountId);
+
+        //TODO  member validation needs to be added
         if (request.getTransactionAmount() > account.getAmount()) {
             throw new IllegalArgumentException("Account balance is not sufficient");
         }
