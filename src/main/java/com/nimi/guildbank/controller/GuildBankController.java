@@ -2,6 +2,8 @@ package com.nimi.guildbank.controller;
 
 import com.nimi.guildbank.dto.*;
 import com.nimi.guildbank.service.BankService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import java.util.Collection;
 /**
  * This controller handles all requests related to guild bank operations
  */
+@Tag(name="Guild Bank Application")
 @Controller
 @RequestMapping("bankservice/api/banks")
 public final class GuildBankController {
@@ -31,6 +34,7 @@ public final class GuildBankController {
      * @param request
      * @return
      */
+    @Operation(summary = "Creating a new Guild Bank for players")
     @PostMapping("")
     public ResponseEntity<CreateBankResponse> createBank(@Validated @RequestBody final CreateBankRequest request) {
         LOGGER.info("Creating a Guild Bank {}", request.toString());
@@ -45,6 +49,7 @@ public final class GuildBankController {
      * @param request
      * @return
      */
+    @Operation(summary = "Creating a new Account for an existing Guild Bank")
     @PostMapping("/{bankId}/accounts")
     public ResponseEntity<CreateAccountResponse> createAccount(@PathVariable long bankId,
                                                                @Validated @RequestBody final CreateAccountRequest request) {
@@ -58,6 +63,7 @@ public final class GuildBankController {
      * This method is responsible to fetch all banks with OPEN status
      * @return
      */
+    @Operation(summary = "Fetching all opened Guild Banks")
     @GetMapping("")
     public ResponseEntity<Collection<BankDTO>> getBanks() {
         LOGGER.info("Fetching Bank request received ");
@@ -70,6 +76,7 @@ public final class GuildBankController {
      * This method is responsible to fetch a bank by Id
      * @return
      */
+    @Operation(summary = "Fetching Guild Bank by Bank Id")
     @GetMapping("/{bankId}")
     public ResponseEntity<BankDTO> getBankById(@PathVariable long bankId) {
         LOGGER.info("Fetching Bank by bank Id : {}",bankId);
@@ -82,6 +89,7 @@ public final class GuildBankController {
      * This method is responsible to fetch a bank account  by bank Id
      * @return
      */
+    @Operation(summary = "Fetching Guild Bank account by Bank Id")
     @GetMapping("/{bankId}/accounts")
     public ResponseEntity<AccountDTO> getAccountByBankId(@PathVariable long bankId) {
         LOGGER.info("Fetching Bank by bank Id : {}",bankId);
@@ -94,6 +102,7 @@ public final class GuildBankController {
      * This method is responsible to fetch a bank account  by bank Id
      * @return
      */
+    @Operation(summary = "Fetching Guild Bank account by Account Id")
     @GetMapping("/{bankId}/accounts/{accountId}")
     public ResponseEntity<AccountDTO> getAccountByBankIdAndAccountId(@PathVariable long bankId, @PathVariable long accountId) {
         LOGGER.info("Fetching Bank account by bank Id : {} and account id : {}",bankId, accountId);
@@ -106,6 +115,7 @@ public final class GuildBankController {
      * This method is responsible to add members to bank
      * @return
      */
+    @Operation(summary = "Adding a new member to the Guild Bank")
     @PostMapping("/{bankId}/members/{userId}")
     public ResponseEntity<AddBankMemberResponse> addMembersToBank(@PathVariable long bankId, @PathVariable String userId) {
         LOGGER.info("Adding member : {} to bank : {}", userId, bankId);
@@ -118,6 +128,7 @@ public final class GuildBankController {
      * This method is responsible to get members by bank Id
      * @return
      */
+    @Operation(summary = "Fetching all Guild Bank members by bank id")
     @GetMapping("/{bankId}/members")
     public ResponseEntity<Collection<BankMemberDTO>> getMembersByBankId(@PathVariable long bankId) {
         LOGGER.info("Fetching members for bank id : {}", bankId);
@@ -131,6 +142,7 @@ public final class GuildBankController {
      * This method is responsible to get members by bank Id and User Id
      * @return
      */
+    @Operation(summary = "Fetching Guild Bank member by bank id and user id")
     @GetMapping("/{bankId}/members/{userId}")
     public ResponseEntity<BankMemberDTO> getMemberByBankIdUserId(@PathVariable long bankId, @PathVariable String userId) {
         LOGGER.info("Fetching member by Bank Id : {} and User Id : {}", bankId, userId);
@@ -145,6 +157,7 @@ public final class GuildBankController {
      * Closing the bank
      * @return
      */
+    @Operation(summary = "Closing the Bank")
     @PostMapping("/{bankId}/close")
     public ResponseEntity<CloseBankResponse> closeBank(@PathVariable long bankId) {
         LOGGER.info("Request received to close the bank : {}", bankId);
@@ -157,6 +170,7 @@ public final class GuildBankController {
      * Closing the bank account
      * @return
      */
+    @Operation(summary = "Closing the Bank Account")
     @PostMapping("/{bankId}/accounts/{accountId}/close")
     public ResponseEntity<CloseAccountResponse> closeAccount(@PathVariable long bankId, @PathVariable long accountId) {
         LOGGER.info("Request received to close the bank account : {}", accountId);
@@ -169,6 +183,7 @@ public final class GuildBankController {
      * Deposit
      * @return
      */
+    @Operation(summary = "Deposit Gold to a Bank Account")
     @PostMapping("/{bankId}/accounts/{accountId}/deposit")
     public ResponseEntity<AccountTransactionResponse> deposit(@Validated @RequestBody final AccountTransactionRequest request,
                                                               @PathVariable long bankId, @PathVariable long accountId) {
@@ -183,6 +198,7 @@ public final class GuildBankController {
      * Withdrawal
      * @return
      */
+    @Operation(summary = "Withdraw gold from Bank Account")
     @PostMapping("/{bankId}/accounts/{accountId}/withdraw")
     public ResponseEntity<AccountTransactionResponse> withdrawal(@Validated @RequestBody final AccountTransactionRequest request,
                                                                  @PathVariable long bankId, @PathVariable long accountId) {

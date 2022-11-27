@@ -2,6 +2,7 @@ package com.nimi.guildbank.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -118,6 +119,14 @@ public class ExceptionTranslator {
 	public ErrorDTO processDataIntegrityViolationException(DataIntegrityViolationException ex) {
 		return new ErrorDTO(ex.getRootCause().getMessage());
 	}
+
+	@ExceptionHandler(InvalidConfigurationPropertyValueException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ErrorDTO processInvalidConfigurationPropertyValueException(InvalidConfigurationPropertyValueException ex) {
+		return new ErrorDTO(ex.getMessage());
+	}
+
 
 	/**
 	 * Process json parser exception error dto.
