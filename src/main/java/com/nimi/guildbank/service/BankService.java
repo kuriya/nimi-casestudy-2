@@ -4,6 +4,9 @@ import com.nimi.guildbank.dto.*;
 
 import java.util.Collection;
 
+/**
+ * This interface represents abstract method of business logic
+ */
 public interface BankService {
 
     CreateBankResponse createBank(CreateBankRequest request);

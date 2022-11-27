@@ -50,6 +50,7 @@ public class BankServiceImpl implements BankService {
         final BankMember member =  BankMember.builder().userId(request.getCreatorId()).bank(bank).build();
         bank.setMembers(Collections.singletonList(member));
         final Bank savedBank = bankRepository.save(bank);
+        bankMemberRepository.save(member);
 
         return new BankToCreateBankResponseTransformer().transform(savedBank);
     }
@@ -131,6 +132,11 @@ public class BankServiceImpl implements BankService {
         final Transaction transaction = Transaction.builder().account(account).type(TransactionType.CR).creatorId(request.getCreatorId())
                 .amount(request.getTransactionAmount()).build();
 
+        return getAccountTransactionResponse(bankId, accountId, request, account, transaction);
+
+    }
+
+    private AccountTransactionResponse getAccountTransactionResponse(long bankId, long accountId, AccountTransactionRequest request, Account account, Transaction transaction) {
         account.getTransactions().add(transaction);
 
         if (account.getBank().getStatus() == BankStatus.CLOSE) {
@@ -144,7 +150,6 @@ public class BankServiceImpl implements BankService {
 
         return AccountTransactionResponse.builder().accountBalance(savedAccount.getAmount())
                 .transactionAmount(request.getTransactionAmount()).bankId(bankId).accountId(accountId).build();
-
     }
 
     /**
@@ -164,18 +169,7 @@ public class BankServiceImpl implements BankService {
         final Transaction transaction = Transaction.builder().account(account).type(TransactionType.DR).creatorId(request.getCreatorId())
                 .amount(request.getTransactionAmount()).build();
 
-        account.getTransactions().add(transaction);
-
-        if (account.getBank().getStatus() == BankStatus.CLOSE) {
-            throw new IllegalArgumentException("Bank is already closed");
-        }
-        if (account.getStatus() == AccountStatus.CLOSE) {
-            throw new IllegalArgumentException("Account is already closed");
-        }
-        final Account savedAccount = accountRepository.save(account);
-
-        return AccountTransactionResponse.builder().accountBalance(savedAccount.getAmount())
-                .transactionAmount(request.getTransactionAmount()).bankId(bankId).accountId(accountId).build();
+        return getAccountTransactionResponse(bankId, accountId, request, account, transaction);
 
     }
 

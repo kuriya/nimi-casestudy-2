@@ -35,7 +35,6 @@ public class Bank {
 
     @Setter
     @OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SELECT)
     private Collection<BankMember> members;
 
     @Setter
