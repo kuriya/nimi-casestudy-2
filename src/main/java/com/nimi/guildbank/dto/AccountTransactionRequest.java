@@ -15,9 +15,6 @@ import javax.validation.constraints.PositiveOrZero;
 @Getter
 @ToString
 public class AccountTransactionRequest {
-
-
-
     @NotNull(message = "'transactionAmount' should not be null")
     @PositiveOrZero
     private final Double transactionAmount;
@@ -25,12 +22,10 @@ public class AccountTransactionRequest {
     @NotBlank(message = "'creatorId' should not be empty")
     private final String creatorId;
 
-
     @JsonCreator
     public AccountTransactionRequest(@JsonProperty("transactionAmount") Double transactionAmount, @JsonProperty("creatorId") String creatorId) {
         this.transactionAmount = transactionAmount;
         this.creatorId = creatorId;
     }
-
 
 }

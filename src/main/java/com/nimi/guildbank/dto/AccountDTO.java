@@ -16,7 +16,4 @@ public class AccountDTO {
     private double balance;
     private String creatorId;
     private AccountStatus status;
-
-
-
 }

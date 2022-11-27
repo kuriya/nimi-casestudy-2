@@ -14,5 +14,4 @@ public class CreateBankResponse {
     private final String name;
     private final long id;
     private final String creatorId;
-
 }

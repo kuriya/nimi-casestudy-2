@@ -16,5 +16,4 @@ public class CloseAccountResponse {
     private final long id;
     private final long bankId;
     private final double balance;
-
 }

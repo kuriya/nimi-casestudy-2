@@ -12,6 +12,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * This class represents 'transactions' table in the database
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,8 +23,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "transactions")
 public class Transaction {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

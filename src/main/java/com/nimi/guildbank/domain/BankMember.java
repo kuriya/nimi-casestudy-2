@@ -15,6 +15,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * This class represents 'bankmembers' table in the database
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,8 +26,6 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = "bankmembers")
 public class BankMember {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

@@ -2,7 +2,6 @@ package com.nimi.guildbank.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -88,22 +87,7 @@ public class ExceptionTranslator {
 		return new ErrorDTO(clientErrorMessage.toString());
 	}
 
-	/**
-	 * Process null value nested path exception error dto.
-	 *
-	 * @param ex the ex
-	 * @return the error dto
-	 */
-	@ExceptionHandler(NullValueInNestedPathException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ResponseBody
-	public ErrorDTO processNullValueInNestedpathException(NullValueInNestedPathException ex) {
-		StringBuilder clientErrorMessage = new StringBuilder();
-		clientErrorMessage.append(ex.getPropertyName());
-		clientErrorMessage.append(":");
-		clientErrorMessage.append(ex.getCause());
-		return new ErrorDTO(clientErrorMessage.toString());
-	}
+
 
 	/**
 	 * Process missing servlet parameter exception error dto.

@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
+/**
+ * JPA repository for 'Bank' domain
+ */
 @Repository
 public interface BankRepository extends JpaRepository<Bank, Long> {
-
     Collection<Bank> findByStatus(BankStatus status);
 
 }

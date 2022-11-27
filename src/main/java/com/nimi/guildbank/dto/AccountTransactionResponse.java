@@ -15,7 +15,4 @@ public class AccountTransactionResponse {
     private final long accountId;
     private final double accountBalance;
     private final double transactionAmount;
-
-
-
 }

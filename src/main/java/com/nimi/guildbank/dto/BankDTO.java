@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Collection;
-
 /**
  * This class represents request object to create a Guild Bank
  */
@@ -17,5 +15,4 @@ public class BankDTO {
     private String creatorId;
     private String name;
     private AccountDTO account;
-
 }

@@ -14,10 +14,4 @@ import lombok.ToString;
 public class CloseBankResponse {
     private final BankStatus status;
     private final long id;
-
-
-    public CloseBankResponse(BankStatus status, long id) {
-        this.status = status;
-        this.id = id;
-    }
 }

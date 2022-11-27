@@ -11,6 +11,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+/**
+ * This class represents 'accounts' table in the database
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -19,8 +22,6 @@ import java.util.Collection;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "accounts")
 public class Account {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

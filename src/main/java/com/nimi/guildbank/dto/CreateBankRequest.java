@@ -13,13 +13,11 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @ToString
 public class CreateBankRequest {
-
     @NotBlank(message = "Bank name should not be empty")
     private final String name;
 
     @NotBlank(message = "'creatorId' should not be empty")
     private final String creatorId;
-
 
     @JsonCreator
     public CreateBankRequest(@JsonProperty("name") String name,
@@ -27,6 +25,5 @@ public class CreateBankRequest {
         this.name = name;
         this.creatorId = creatorId;
     }
-
 
 }
